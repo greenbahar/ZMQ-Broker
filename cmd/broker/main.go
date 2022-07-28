@@ -82,7 +82,6 @@ func main() {
 			totalReceivedInBroker++
 			receiver.Send("received", 0)
 			NumberOfSentMessages++
-			fmt.Println(".........")
 
 			sender.Send(rawMessage, 0) // ok <nil>
 			_, err := sender.Recv(0)   // 5717 <nil>
@@ -116,7 +115,6 @@ func StoreDataToFile() {
 			select {
 			case <-ticker.C:
 				mu.Lock()
-				fmt.Println(inMemoryStorage)
 				err := brokerStorage.AppendToFile("./persistence/file/broker-storage/fileStorage.txt", inMemoryStorage)
 				mu.Unlock()
 				if err != nil {
