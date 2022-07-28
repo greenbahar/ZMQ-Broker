@@ -1,13 +1,13 @@
 /*
 	sender:
-		the server do not need to get the reply from the broker so no need to REQ-RES pattern
+		the server do not need to get the reply from the broker-storage so no need to REQ-RES pattern
 		there is no need to parallel workers (brokers) so no need to use PUSH-PULL pattern
-		as far as the tasks demands; the server needs to send requests (of rate more than 10kbps) to the broker. Hence:
+		as far as the tasks demands; the server needs to send requests (of rate more than 10kbps) to the broker-storage. Hence:
 			- server would have a goroutine to calculate the messages per second and if it was less, the n the server
 			  would create another goroutine to start another instance of the message publisher to work concurrently to
 			  reach the desired mps. the server starts with one instance and adds or removes more instances when needed.
-		the messages need to have the id to calculate number of received messages in the receiver. Hence:
-			- server needs to publish a message to send the total messages to the broker (to be sent to the receiver)
+		the messages need to have the id to calculate number of received messages in the receiver-storage. Hence:
+			- server needs to publish a message to send the total messages to the broker-storage (to be sent to the receiver-storage)
 */
 
 package main
@@ -44,7 +44,7 @@ func main() {
 		for {
 			select {
 			case <-ticker.C:
-				fmt.Println(counter)
+				//fmt.Println(counter)
 				counter = 0
 			}
 		}
@@ -55,9 +55,9 @@ func main() {
 		messageSize := rand.Intn(8000) + 50
 		message := fmt.Sprintf("id: %d %s", id, string(random8kFile[:messageSize]))
 		socket.Send(message, 0)
-		fmt.Println(id, message)
-		reply, _ := socket.Recv(0)
-		fmt.Println(reply)
+		//fmt.Println(id, message)
+		socket.Recv(0)
+		//fmt.Println(reply)
 		counter++
 		id++
 	}
